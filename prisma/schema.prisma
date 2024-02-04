@@ -1,0 +1,28 @@
+// This is your Pris schema file,
+
+generator client {
+  provider = "pris-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model FraudCase {
+  id        Int      @id @default(autoincrement())
+  nature    String
+  details   String
+  createdAt DateTime @default(now())
+  documents SupportingDocument[]
+}
+
+model SupportingDocument {
+  id          Int      @id @default(autoincrement())
+  fileName    String
+  fileType    String
+  fileSize    Int
+  createdAt   DateTime @default(now())
+  fraudCase   FraudCase @relation(fields: [fraudCaseId], references: [id])
+  fraudCaseId Int
+}
